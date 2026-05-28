@@ -1,17 +1,33 @@
-import { Wq, Wk, Wv, W1, b1, W2, b2, Wo, headNums } from "./data.js";
+import { generateLogits, generateMaskToken, mlm } from "./mlm.js";
 import { getPositionalEmbeddings } from "./position.js";
-import { tokenize, detokenize } from "./tokenizer.js";
 import { calculateAttention } from "./attention.js";
 import { add, norm } from "./add&norm.js";
+import { tokenize } from "./tokenizer.js";
 import { embed } from "./embedding.js";
 import { ffn } from "./ffn.js";
+import { Wo } from "./data.js";
 import fs from "fs";
 
-function Encoder(Wq, Wk, Wv, W1, b1, W2, b2, headNums) {
-    // 输入文本
-    const inputText = "Hello, Mini Attention!";
+function Encoder(
+    inputText,
+    Wq,
+    Wk,
+    Wv,
+    W1,
+    b1,
+    W2,
+    b2,
+    headNums,
+    W_vocab,
+    b_vocab,
+) {
     const tokenIds = tokenize(inputText);
-    const X = embed(tokenIds);
+
+    // 加一个MLM占位符，随机替换一个 token 为 MASK_TOKEN_ID
+    const [maskedTokenIds, maskIndex, originalTokenId] =
+        generateMaskToken(tokenIds);
+
+    const X = embed(maskedTokenIds);
 
     // 计算位置编码
     const positionEmbeddings = getPositionalEmbeddings(X, X[0].length);
@@ -39,16 +55,12 @@ function Encoder(Wq, Wk, Wv, W1, b1, W2, b2, headNums) {
         norm(add(addNormOutput[index], row)),
     );
 
-    // 输出结果到json文件中
-    const outputData = {
-        positionEmbeddings,
-        attentionOutput,
-        addNormOutput,
-        ffnOutput,
-        ffnAddNormOutput,
-    };
-    fs.writeFileSync("output.json", JSON.stringify(outputData, null, 2));
-    console.log("计算完成，结果已保存到output.json文件中。");
+    // 处理完成后，计算logits，并进行MLM预测
+    const logits = generateLogits(ffnAddNormOutput, W_vocab, b_vocab);
+    const probabilities = mlm(logits, maskIndex);
+    const hiddenAtMask = ffnAddNormOutput[maskIndex];
+
+    return [probabilities, logits, maskIndex, originalTokenId, hiddenAtMask];
 }
 
-Encoder(Wq, Wk, Wv, W1, b1, W2, b2, headNums);
+export { Encoder };

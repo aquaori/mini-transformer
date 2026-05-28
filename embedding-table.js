@@ -3,7 +3,7 @@
 // 不要手动修改，除非你明确知道自己在做什么
 
 export const EMBEDDING_META = {
-  vocabSize: 258,
+  vocabSize: 259,
   dModel: 4,
 };
 
@@ -1039,5 +1039,9 @@ export const embeddingMatrix = new Float32Array([
   -0.0105744,
   0.00478921,
   0.00241167,
-  0.00104498
+  0.00104498,
+  0.01356844,
+  0.01915921,
+  -0.01317439,
+  -0.01991127
 ]);
