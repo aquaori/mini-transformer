@@ -1,11 +1,18 @@
-import { X, Wq, Wk, Wv, W1, b1, W2, b2, Wo, headNums } from "./data.js";
+import { Wq, Wk, Wv, W1, b1, W2, b2, Wo, headNums } from "./data.js";
 import { getPositionalEmbeddings } from "./position.js";
+import { tokenize, detokenize } from "./tokenizer.js";
 import { calculateAttention } from "./attention.js";
 import { add, norm } from "./add&norm.js";
+import { embed } from "./embedding.js";
 import { ffn } from "./ffn.js";
 import fs from "fs";
 
-function Encoder(X, Wq, Wk, Wv, W1, b1, W2, b2, headNums) {
+function Encoder(Wq, Wk, Wv, W1, b1, W2, b2, headNums) {
+    // 输入文本
+    const inputText = "Hello, Mini Attention!";
+    const tokenIds = tokenize(inputText);
+    const X = embed(tokenIds);
+
     // 计算位置编码
     const positionEmbeddings = getPositionalEmbeddings(X, X[0].length);
 
@@ -44,4 +51,4 @@ function Encoder(X, Wq, Wk, Wv, W1, b1, W2, b2, headNums) {
     console.log("计算完成，结果已保存到output.json文件中。");
 }
 
-Encoder(X, Wq, Wk, Wv, W1, b1, W2, b2, headNums);
+Encoder(Wq, Wk, Wv, W1, b1, W2, b2, headNums);

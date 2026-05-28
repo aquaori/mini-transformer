@@ -9,6 +9,6 @@
 # TODO-List
 
 - [x] Encoder
-- [ ] Tokenizer
+- [x] Tokenizer
 - [ ] Decoder
 - [ ] Backward
