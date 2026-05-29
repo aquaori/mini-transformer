@@ -1,0 +1,34 @@
+{
+  "name": "moni-transformer",
+  "version": "1.0.0",
+  "description": "这是一个用于存放我探索和实践Transformer原理的仓库。",
+  "homepage": "https://github.com/aquaori/mini-transformer#readme",
+  "bugs": {
+    "url": "https://github.com/aquaori/mini-transformer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aquaori/mini-transformer.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "encoder:eval": "node encoder/scripts/eval.js",
+    "encoder:validate": "node encoder/scripts/validate.js",
+    "encoder:train": "node encoder/scripts/train.js",
+    "dataset:convert": "node encoder/scripts/convert-csv-dataset.js",
+    "tokenizer:build": "node encoder/scripts/build-tokenizer-vocab.js",
+    "browser:train": "node browser-runner/run-browser-train.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init": "npm run tokenizer:build && node encoder/scripts/init-embedding.js && node encoder/scripts/init-params.js && node encoder/scripts/initVocabHead.js"
+  },
+  "dependencies": {
+    "@mni-ml/framework": "^0.3.1",
+    "accel-gpu": "^1.0.3"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}
