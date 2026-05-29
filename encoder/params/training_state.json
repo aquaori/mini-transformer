@@ -1,5 +1,5 @@
 {
-  "bestValidationLoss": 6.449651414858741,
-  "updatedAt": "2026-05-29T12:49:56.358Z",
-  "runner": "browser"
+  "bestValidationLoss": 6.428028482704043,
+  "updatedAt": "2026-05-29T14:52:48.207Z",
+  "runner": "node"
 }

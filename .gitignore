@@ -15,4 +15,7 @@ node_modules/
 
 encoder/data/*
 
+externalData.js
+dataSets.js
+
 /data/*
